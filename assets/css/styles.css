@@ -1,0 +1,21 @@
+header {
+    background-color: red;
+}
+
+body {
+    background-color: beige;
+}
+
+#trainstationname {
+    font-family: 'Tangerine';
+    font-size: 70px;
+}
+
+.jumbotron, .panel-heading {
+    background-image: linear-gradient(whitesmoke, lightblue, red);
+    
+}
+
+.text-center{
+    font-size: 35px;
+}
