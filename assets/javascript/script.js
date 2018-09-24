@@ -1,27 +1,19 @@
 $(document).ready(function () {
 	var config = {
-		apiKey: "AIzaSyAdaj-eidUQPCcKYrVK24WpG3IC224ShY8",
-		authDomain: "timeclockapp-affa7.firebaseapp.com",
-		databaseURL: "https://timeclockapp-affa7.firebaseio.com",
-		projectId: "timeclockapp-affa7",
-		storageBucket: "",
-		messagingSenderId: "766938401677"
-	};
+		apiKey: "AIzaSyDFQW_V3WcIBd7G7Z-wxskJo7j5ohGOfnQ",
+		authDomain: "train-71ca1.firebaseapp.com",
+		databaseURL: "https://train-71ca1.firebaseio.com",
+		projectId: "train-71ca1",
+		storageBucket: "train-71ca1.appspot.com",
+		messagingSenderId: "170958867906"
+	  };
 
 	firebase.initializeApp(config);
 
 	var database = firebase.database();
-	//CONVERT TRAIN TIME================================================
-	//var currentTime = moment();
-	//console.log("Current Time: " + currentTime);
-	//FUNCTIONS=========================================================
 
-	// CAPTURE BUTTON CLICK
 	$("#addTrainBtn").on("click", function () {
-
-		//VALUES FOR EACH VARIABLE IN HTML
 		var name = $('#trainNameInput').val().trim();
-		var line = $('#lineInput').val().trim();
 		var dest = $('#destinationInput').val().trim();
 		var time = $('#trainTimeInput').val().trim();
 		var freq = $('#frequencyInput').val().trim();
@@ -37,14 +29,13 @@ $(document).ready(function () {
 		$("input").val('');
 		return false;
 	});
-
 	database.ref().on("child_added", function (childSnapshot) {
 			// console.log(childSnapshot.val());
 			var name = childSnapshot.val().name;
 			var dest = childSnapshot.val().dest;
 			var time = childSnapshot.val().time;
 			var freq = childSnapshot.val().freq;
-
+            var line = childSnapshot.val().line;
 			console.log("Name: " + name);
 			console.log("Destination: " + dest);
 			console.log("Time: " + time);
@@ -59,21 +50,15 @@ $(document).ready(function () {
 			var tRemainder = tDifference % freq;
 			var minsAway = freq - tRemainder;
 			var nextTrain = moment().add(minsAway, 'minutes');
-			$('#trainTable').append(
-				"<tr><td id='nameDisplay'>" + childSnapshot.val().name +
-				"</td><td id='destDisplay'>" + childSnapshot.val().dest +
-				"</td><td id='freqDisplay'>" + childSnapshot.val().freq +
-				"</td><td id='nextDisplay'>" + moment(nextTrain).format("HH:mm") +
-				"</td><td id='awayDisplay'>" + minsAway + ' minutes until arrival' + "</td></tr>");
-		},
-		function (errorObject) {
-			console.log("Read failed: " + errorObject.code)
+			$('#trainTable').append(	
+				"<tr><td id='train'>" + childSnapshot.val().name +
+				"</td><td id='destination'>" + childSnapshot.val().dest +
+				"</td><td id='frequency'>" + childSnapshot.val().freq +
+				"</td><td id='nextarrival'>" + moment(nextTrain).format("HH:mm") +
+				"</td><td id='minutesaway'>" + minsAway + ' minutes until arrival' + "</td></tr>");
 		});
-$("nameDisplay").hide();
-$("destDisplay").hide();
-$("freqDisplay").hide();
-$("nextDisplay").hide();
-$("awayDisplay").hide();
+	
+	
 
 
 });
