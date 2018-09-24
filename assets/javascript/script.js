@@ -6,59 +6,41 @@ $(document).ready(function () {
 		projectId: "train-71ca1",
 		storageBucket: "train-71ca1.appspot.com",
 		messagingSenderId: "170958867906"
-	  };
-
+	};
 	firebase.initializeApp(config);
-
 	var database = firebase.database();
 
 	$("#addTrainBtn").on("click", function () {
-		var name = $('#trainNameInput').val().trim();
-		var dest = $('#destinationInput').val().trim();
+		var trainname = $('#trainNameInput').val().trim();
+		var destination = $('#destinationInput').val().trim();
 		var time = $('#trainTimeInput').val().trim();
-		var freq = $('#frequencyInput').val().trim();
-
-		// PUSH NEW ENTRY TO FIREBASE
+		var frequency = $('#frequencyInput').val().trim();
 		database.ref().push({
-			name: name,
-			dest: dest,
+			name: trainname,
+			dest: destination,
 			time: time,
-			freq: freq,
-			timeAdded: firebase.database.ServerValue.TIMESTAMP
+			freq: frequency,
 		});
-		$("input").val('');
-		return false;
 	});
 	database.ref().on("child_added", function (childSnapshot) {
-			// console.log(childSnapshot.val());
-			var name = childSnapshot.val().name;
-			var dest = childSnapshot.val().dest;
-			var time = childSnapshot.val().time;
-			var freq = childSnapshot.val().freq;
-            var line = childSnapshot.val().line;
-			console.log("Name: " + name);
-			console.log("Destination: " + dest);
-			console.log("Time: " + time);
-			console.log("Frequency: " + freq);
-
-			var freq = parseInt(freq);
-			var currentTime = moment();
-			var dConverted = moment(childSnapshot.val().time, 'HH:mm').subtract(1, 'years');;
-			var trainTime = moment(dConverted).format('HH:mm');
-			var tConverted = moment(trainTime, 'HH:mm').subtract(1, 'years');
-			var tDifference = moment().diff(moment(tConverted), 'minutes');
-			var tRemainder = tDifference % freq;
-			var minsAway = freq - tRemainder;
-			var nextTrain = moment().add(minsAway, 'minutes');
-			$('#trainTable').append(	
-				"<tr><td id='train'>" + childSnapshot.val().name +
-				"</td><td id='destination'>" + childSnapshot.val().dest +
-				"</td><td id='frequency'>" + childSnapshot.val().freq +
-				"</td><td id='nextarrival'>" + moment(nextTrain).format("HH:mm") +
-				"</td><td id='minutesaway'>" + minsAway + ' minutes until arrival' + "</td></tr>");
-		});
-	
-	
-
-
+		var name = childSnapshot.val().name,
+		dest = childSnapshot.val().dest,
+		time = childSnapshot.val().time,
+		frequency = childSnapshot.val().freq,
+		frequency = parseInt(frequency),
+		currentTime = moment(),
+		dConverted = moment(childSnapshot.val().time, 'HH:mm').subtract(1, 'years'),
+		trainTime = moment(dConverted).format('HH:mm'),
+		tConverted = moment(trainTime, 'HH:mm').subtract(1, 'years'),
+		timeDifference = moment().diff(moment(tConverted), 'minutes'),
+		timeLeft = timeDifference % frequency,
+		minsAway = frequency - timeLeft,
+		nextTrain = moment().add(minsAway, 'minutes');
+		$('#trainTable').append(
+			"<tr><td id='train'>" + childSnapshot.val().name +
+			"</td><td id='destination'>" + childSnapshot.val().dest +
+			"</td><td id='frequency'>" + childSnapshot.val().freq +
+			"</td><td id='nextarrival'>" + moment(nextTrain).format("HH:mm") +
+			"</td><td id='minutesaway'>" + minsAway + ' minutes until arrival' + "</td></tr>");
+	});
 });
