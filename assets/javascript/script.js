@@ -41,6 +41,6 @@ $(document).ready(function () {
 			"</td><td id='destination'>" + childSnapshot.val().dest +
 			"</td><td id='frequency'>" + childSnapshot.val().freq +
 			"</td><td id='nextarrival'>" + moment(nextTrain).format("HH:mm") +
-			"</td><td id='minutesaway'>" + minsAway + ' minutes until arrival' + "</td></tr>");
+			"</td><td id='minutesaway'>" + minsAway + ' minutes' + "</td></tr>");
 	});
 });
