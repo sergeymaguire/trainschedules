@@ -22,6 +22,7 @@ $(document).ready(function () {
 			freq: frequency,
 		});
 	});
+
 	database.ref().on("child_added", function (childSnapshot) {
 		var name = childSnapshot.val().name,
 		dest = childSnapshot.val().dest,
